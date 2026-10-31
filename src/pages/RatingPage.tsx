@@ -88,13 +88,13 @@ export function RatingPage() {
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-bold">
                         {r.name}
-                        {me && <span className="text-accent"> · ти</span>}
+                        {me && <span className="text-accent-ink"> · ти</span>}
                       </p>
                       <p className="text-xs text-muted">
                         {r.games} {plural(r.games, 'гра', 'гри', 'ігор')}
                       </p>
                     </div>
-                    <span className="font-display text-lg font-extrabold text-accent tabular-nums">{r.points}</span>
+                    <span className="font-display text-lg font-extrabold text-accent-ink tabular-nums">{r.points}</span>
                   </li>
                 );
               })}

@@ -4,15 +4,18 @@
   --font-display: "Unbounded", system-ui, sans-serif;
   --font-sans: "Manrope", system-ui, sans-serif;
 
-  --color-bg: #0b1410;
-  --color-surface: #12201a;
-  --color-surface-2: #1a2d24;
-  --color-line: #24392f;
-  --color-fg: #eaf2ec;
-  --color-muted: #9bb0a3;
+  /* Defaults = "Нічний стадіон" dark; src/lib/themes.ts overrides them at runtime. */
+  --color-bg: #0a1226;
+  --color-surface: #111c36;
+  --color-surface-2: #192747;
+  --color-line: #24345a;
+  --color-fg: #eef2fb;
+  --color-muted: #9eabc8;
   --color-accent: #c6f432;
-  --color-on-accent: #0b1410;
-  --color-danger: #ff6b5e;
+  --color-on-accent: #0a1226;
+  /* Accent for text and icons; may be darker than the fill in light mode. */
+  --color-accent-ink: #c6f432;
+  --color-danger: #ff6b6b;
   --color-team-a: #c6f432;
   --color-team-b: #5ec8ff;
   --color-team-c: #ffb547;
@@ -43,7 +46,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-accent-ink);
   outline-offset: 2px;
 }
 

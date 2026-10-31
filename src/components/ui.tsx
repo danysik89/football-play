@@ -130,7 +130,7 @@ export const Badge = ({ children, className = '' }: { children: ReactNode; class
 export function EmptyState({ icon, title, text, action }: { icon: ReactNode; title: string; text?: string; action?: ReactNode }) {
   return (
     <div className="flex flex-col items-center px-6 py-12 text-center">
-      <div className="mb-4 flex size-16 items-center justify-center rounded-3xl bg-surface-2 text-accent">{icon}</div>
+      <div className="mb-4 flex size-16 items-center justify-center rounded-3xl bg-surface-2 text-accent-ink">{icon}</div>
       <h2 className="font-display text-lg font-bold">{title}</h2>
       {text && <p className="mt-2 max-w-xs text-muted">{text}</p>}
       {action && <div className="mt-6">{action}</div>}

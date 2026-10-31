@@ -59,7 +59,7 @@ export function AdminUsersPage() {
           className="[&_input]:pl-11"
         />
         <p className="mt-2 flex items-center gap-1.5 text-sm text-muted">
-          <ShieldPlus size={16} className="text-accent" aria-hidden /> — призначити гравця адміном
+          <ShieldPlus size={16} className="text-accent-ink" aria-hidden /> — призначити гравця адміном
         </p>
       </div>
 
@@ -77,11 +77,11 @@ export function AdminUsersPage() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-bold">
                       {u.name}
-                      {isMe && <span className="text-accent"> · ти</span>}
+                      {isMe && <span className="text-accent-ink"> · ти</span>}
                     </p>
                     <p className="flex min-w-0 items-center gap-1.5 text-sm text-muted">
                       {isAdmin && (
-                        <Badge className="shrink-0 bg-accent/15 px-2 text-accent">
+                        <Badge className="shrink-0 bg-accent/15 px-2 text-accent-ink">
                           <Shield size={11} /> Адмін
                         </Badge>
                       )}
@@ -95,7 +95,7 @@ export function AdminUsersPage() {
                         Забрати
                       </Button>
                     ) : (
-                      <IconButton label={`Зробити ${u.name} адміном`} className="border border-line bg-surface-2 text-accent" onClick={() => setTarget(u)}>
+                      <IconButton label={`Зробити ${u.name} адміном`} className="border border-line bg-surface-2 text-accent-ink" onClick={() => setTarget(u)}>
                         <ShieldPlus size={20} />
                       </IconButton>
                     )

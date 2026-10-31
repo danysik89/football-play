@@ -2,7 +2,6 @@ import { lazy, StrictMode, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { SessionProvider, useSession } from './lib/session';
 import { initTheme } from './lib/themes';
 import { EventPage, HomePage, PageSpinner } from './pages/HomePage';
@@ -48,7 +47,6 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <SessionProvider>
         <App />
-        <ThemeSwitcher />
       </SessionProvider>
     </BrowserRouter>
   </StrictMode>,

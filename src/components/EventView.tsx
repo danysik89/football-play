@@ -45,7 +45,7 @@ export function EventView({ event }: { event: FootballEvent }) {
           <p className="mt-2 text-lg font-semibold text-muted">{dayMonth(event.startsAt)}</p>
           <div className="mt-6 space-y-3">
             <p className="flex items-center gap-3 text-lg font-bold">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-accent/15 text-accent">
+              <span className="flex size-10 items-center justify-center rounded-xl bg-accent/15 text-accent-ink">
                 <Clock size={20} />
               </span>
               {time(event.startsAt)}
@@ -56,7 +56,7 @@ export function EventView({ event }: { event: FootballEvent }) {
               rel="noreferrer"
               className="flex items-center gap-3 text-lg font-bold underline-offset-4 hover:underline"
             >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent-ink">
                 <MapPin size={20} />
               </span>
               {event.location}
@@ -68,7 +68,7 @@ export function EventView({ event }: { event: FootballEvent }) {
             <div className="mt-6">
               {me ? (
                 <div className="flex items-center gap-3">
-                  <div className="flex h-14 flex-1 items-center gap-2 rounded-2xl bg-accent/15 px-4 font-bold text-accent">
+                  <div className="flex h-14 flex-1 items-center gap-2 rounded-2xl bg-accent/15 px-4 font-bold text-accent-ink">
                     <Check size={22} strokeWidth={3} /> Ти в складі!
                   </div>
                   <Button variant="secondary" className="h-14" onClick={() => setConfirm('leave')}>
@@ -93,9 +93,9 @@ export function EventView({ event }: { event: FootballEvent }) {
       <Card>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 font-display text-lg font-bold">
-            <Users size={20} className="text-accent" /> Склад
+            <Users size={20} className="text-accent-ink" /> Склад
           </h2>
-          <span className="font-display text-2xl font-extrabold text-accent tabular-nums">{attendees.length}</span>
+          <span className="font-display text-2xl font-extrabold text-accent-ink tabular-nums">{attendees.length}</span>
         </div>
         {loading ? (
           <div className="flex justify-center py-6 text-muted">
@@ -156,7 +156,7 @@ function AttendeeRow({ attendee: a, index, isMe, canRemove, onRemove }: { attend
       <div className="min-w-0 flex-1">
         <p className="truncate font-bold">
           {a.name}
-          {isMe && <span className="font-semibold text-accent"> · ти</span>}
+          {isMe && <span className="font-semibold text-accent-ink"> · ти</span>}
         </p>
         {a.kind === 'guest' ? (
           <p className="truncate text-sm text-muted">Гість від {a.addedByName}</p>
@@ -246,7 +246,7 @@ function GuestsModal({ open, onClose, event, guests, attendees }: { open: boolea
                   {inList ? (
                     <span className="text-xs font-semibold text-muted">вже в складі</span>
                   ) : (
-                    <UserPlus size={18} className="text-accent" />
+                    <UserPlus size={18} className="text-accent-ink" />
                   )}
                 </button>
               </li>
@@ -257,7 +257,7 @@ function GuestsModal({ open, onClose, event, guests, attendees }: { open: boolea
               disabled={busy}
               onClick={addAsGuest}
               className={`flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-dashed px-3 py-3 text-left transition ${
-                matches.length ? 'border-line text-muted hover:text-fg' : 'border-accent/50 bg-accent/10 text-accent'
+                matches.length ? 'border-line text-muted hover:text-fg' : 'border-accent/50 bg-accent/10 text-accent-ink'
               }`}
             >
               <UserPlus size={18} className="shrink-0" />
@@ -314,7 +314,7 @@ function ResultsCard({ event }: { event: FootballEvent }) {
                 return (
                   <span key={id} className="mr-1 inline-block after:content-[','] last:after:content-none">
                     {name(id)}
-                    {adj ? <span className={adj > 0 ? 'text-accent' : 'text-danger'}> {adj > 0 ? `+${adj}` : adj}</span> : null}
+                    {adj ? <span className={adj > 0 ? 'text-accent-ink' : 'text-danger'}> {adj > 0 ? `+${adj}` : adj}</span> : null}
                   </span>
                 );
               })}

@@ -1,6 +1,6 @@
 import { LogOut, Shield } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { ModeToggle } from '../components/ThemeSwitcher';
+import { ModeToggle } from '../components/ModeToggle';
 import { Avatar, Badge, Button, Card, Field, PageTitle } from '../components/ui';
 import { updateUser, useEvents, useSeasons } from '../lib/api';
 import { auth, isDemo } from '../lib/backend';
@@ -40,7 +40,7 @@ export function ProfilePage() {
             <p className="truncate font-display text-lg font-bold">{user.name}</p>
             <p className="truncate text-sm text-muted">{user.email}</p>
             {isAdmin && (
-              <Badge className="mt-2 bg-accent/15 text-accent">
+              <Badge className="mt-2 bg-accent/15 text-accent-ink">
                 <Shield size={12} /> Адміністратор
               </Badge>
             )}
@@ -52,7 +52,7 @@ export function ProfilePage() {
             <p className="mb-3 text-sm text-muted">{activeSeason.name}</p>
             <div className="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p className="font-display text-2xl font-extrabold text-accent tabular-nums">{place >= 0 ? place + 1 : '—'}</p>
+                <p className="font-display text-2xl font-extrabold text-accent-ink tabular-nums">{place >= 0 ? place + 1 : '—'}</p>
                 <p className="text-xs text-muted">місце</p>
               </div>
               <div>

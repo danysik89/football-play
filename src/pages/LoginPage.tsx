@@ -52,7 +52,7 @@ export function LoginPage() {
           <h1 className="font-display text-4xl leading-[1.05] font-extrabold tracking-tight">
             Граємо
             <br />
-            <span className="text-accent">у футбол</span>
+            <span className="text-accent-ink">у футбол</span>
           </h1>
           <p className="mt-3 text-muted">Записуйся на тренування, збирай очки, піднімайся в рейтингу сезону.</p>
         </div>

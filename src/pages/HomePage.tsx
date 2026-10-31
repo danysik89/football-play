@@ -80,12 +80,12 @@ export function EventPage() {
   const { id } = useParams();
   const { event, loading } = useEvent(id);
   if (loading) return <PageSpinner />;
-  if (!event) return <EmptyState icon={<Goal size={30} />} title="Подію не знайдено" action={<Link to="/" className="font-bold text-accent">На головну</Link>} />;
+  if (!event) return <EmptyState icon={<Goal size={30} />} title="Подію не знайдено" action={<Link to="/" className="font-bold text-accent-ink">На головну</Link>} />;
   return <EventView event={event} />;
 }
 
 export const PageSpinner = () => (
-  <div className="flex justify-center py-24 text-accent">
+  <div className="flex justify-center py-24 text-accent-ink">
     <Spinner className="size-8" />
   </div>
 );

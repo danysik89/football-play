@@ -19,7 +19,7 @@ export function AdminEventPage() {
   const { event, loading } = useEvent(id);
   const { attendees, loading: aLoading } = useAttendees(id);
   if (loading || aLoading) return <PageSpinner />;
-  if (!event) return <EmptyState icon={<ArrowLeft />} title="Подію не знайдено" action={<Link to="/admin" className="font-bold text-accent">Назад</Link>} />;
+  if (!event) return <EmptyState icon={<ArrowLeft />} title="Подію не знайдено" action={<Link to="/admin" className="font-bold text-accent-ink">Назад</Link>} />;
   return <Editor key={event.id} event={event} attendees={attendees} />;
 }
 
@@ -99,7 +99,7 @@ function Editor({ event, attendees }: { event: FootballEvent; attendees: Attende
       </div>
 
       {finished && (
-        <div className="flex items-center justify-between gap-3 rounded-2xl bg-accent/10 px-4 py-3 text-sm font-semibold text-accent">
+        <div className="flex items-center justify-between gap-3 rounded-2xl bg-accent/10 px-4 py-3 text-sm font-semibold text-accent-ink">
           Подію завершено, очки в рейтингу.
           <button className="cursor-pointer underline underline-offset-2" onClick={() => reopenEvent(event.id)}>
             Відкрити знову
@@ -185,7 +185,7 @@ function Editor({ event, attendees }: { event: FootballEvent; attendees: Attende
                           className="size-11 cursor-pointer rounded-xl border font-display font-bold transition"
                           style={
                             ti === i
-                              ? { background: TEAM_COLORS[i], borderColor: TEAM_COLORS[i], color: 'var(--color-on-accent)' }
+                              ? { background: TEAM_COLORS[i], borderColor: TEAM_COLORS[i], color: 'var(--color-surface)' }
                               : { borderColor: 'var(--color-line)', color: 'var(--color-muted)' }
                           }
                         >
@@ -268,7 +268,7 @@ function Editor({ event, attendees }: { event: FootballEvent; attendees: Attende
 
 function Stepper({ value, onChange, label, compact, signed }: { value: number; onChange: (v: number) => void; label: string; compact?: boolean; signed?: boolean }) {
   const size = compact ? 'size-9' : 'size-10';
-  const color = !signed || value === 0 ? '' : value > 0 ? 'text-accent' : 'text-danger';
+  const color = !signed || value === 0 ? '' : value > 0 ? 'text-accent-ink' : 'text-danger';
   return (
     <div className="flex items-center gap-1" role="group" aria-label={label}>
       <button aria-label="Мінус" onClick={() => onChange(value - 1)} className={`${size} flex cursor-pointer items-center justify-center rounded-xl bg-bg text-muted transition hover:text-fg`}>
@@ -356,7 +356,7 @@ function AddPlayerModal({ open, onClose, event, attendees }: { open: boolean; on
                 <button onClick={() => joinEvent(event.id, u)} className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-2 py-2 text-left transition hover:bg-surface-2">
                   <Avatar name={u.name} photoURL={u.photoURL} size={36} />
                   <span className="flex-1 truncate font-semibold">{u.name}</span>
-                  <Plus size={18} className="text-accent" />
+                  <Plus size={18} className="text-accent-ink" />
                 </button>
               </li>
             ))}

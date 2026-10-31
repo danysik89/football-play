@@ -30,7 +30,7 @@ export function AdminPage() {
       <div className="space-y-4">
         <SeasonCard active={activeSeason} hasSeasons={seasons.length > 0} />
         <Link to="/admin/users" className="flex items-center gap-4 rounded-3xl border border-line bg-surface p-5 transition hover:border-accent/40">
-          <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent">
+          <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent-ink">
             <UsersRound size={24} />
           </span>
           <div className="min-w-0 flex-1">
@@ -109,7 +109,7 @@ function SeasonCard({ active, hasSeasons }: { active: Season | null; hasSeasons:
   return (
     <Card>
       <div className="flex items-center gap-4">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent-ink">
           {active ? <Icon size={24} /> : <Flag size={24} />}
         </span>
         <div className="min-w-0 flex-1">
@@ -132,7 +132,7 @@ function SeasonCard({ active, hasSeasons }: { active: Season | null; hasSeasons:
                 aria-pressed={type === t}
                 onClick={() => pick(t)}
                 className={`flex h-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border font-bold transition ${
-                  type === t ? 'border-accent bg-accent/10 text-accent' : 'border-line text-muted hover:text-fg'
+                  type === t ? 'border-accent bg-accent/10 text-accent-ink' : 'border-line text-muted hover:text-fg'
                 }`}
               >
                 {t === 'summer' ? <Sun size={22} /> : <Snowflake size={22} />}
@@ -181,7 +181,7 @@ function CreateEventCard({ seasonId, lastLocation }: { seasonId: string; lastLoc
   return (
     <Card>
       <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-bold">
-        <CalendarPlus size={20} className="text-accent" /> Нове тренування
+        <CalendarPlus size={20} className="text-accent-ink" /> Нове тренування
       </h2>
       <form onSubmit={submit} className="space-y-4">
         <Field label="Дата і час" type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} required />

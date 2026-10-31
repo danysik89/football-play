@@ -17,7 +17,7 @@ export function Layout() {
   return (
     <div className="pitch-bg min-h-dvh">
       {isDemo && (
-        <div className="bg-accent/10 px-4 py-1.5 text-center text-xs font-semibold text-accent">
+        <div className="bg-accent/10 px-4 py-1.5 text-center text-xs font-semibold text-accent-ink">
           Демо-режим: дані зберігаються лише в цьому браузері
         </div>
       )}
@@ -37,7 +37,7 @@ export function Layout() {
                 to={to}
                 end={to === '/'}
                 className={({ isActive }) =>
-                  `flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-bold transition ${isActive ? 'text-accent' : 'text-muted hover:text-fg'}`
+                  `flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-bold transition ${isActive ? 'text-accent-ink' : 'text-muted hover:text-fg'}`
                 }
               >
                 {({ isActive }) => (
