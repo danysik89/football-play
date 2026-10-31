@@ -1,27 +1,54 @@
-# ElectronFootball
+# Футбол — запис на тренування
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0.
+Мобільний веб-застосунок для запису на футбольні тренування: актуальна подія на головній, кнопка «Приєднатися», гості, сезони (літо/зима), команди з очками та рейтинг сезону з графіками.
 
-## Development server
+**Стек:** React 19 + TypeScript, Vite, Tailwind CSS 4, Firebase (Auth + Firestore), Recharts, lucide-react.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Запуск
 
-## Code scaffolding
+```bash
+npm install
+npm run dev
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Без налаштованого Firebase застосунок працює в **демо-режимі**: акаунти й дані зберігаються в `localStorage` браузера, а кожен новий користувач отримує роль адміна (роль можна перемкнути в «Профілі»). Зручно, щоб показати застосунок без бекенду.
 
-## Build
+## Підключення Firebase
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+1. Створіть проєкт у [Firebase Console](https://console.firebase.google.com/) і додайте **Web app**.
+2. **Authentication → Sign-in method:** увімкніть *Email/Password* і *Google*.
+3. **Firestore Database:** створіть базу, потім вставте вміст [`firestore.rules`](firestore.rules) у вкладку *Rules* і опублікуйте.
+4. Скопіюйте `.env.example` у `.env.local` і заповніть значення з налаштувань Web app.
+5. Перезапустіть `npm run dev`.
 
-## Running unit tests
+### Перший адмін
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Усі нові користувачі отримують роль `user`. Щоб зробити когось адміном: увійдіть у застосунок, потім у Firestore відкрийте `users/{uid}` і змініть поле `role` на `admin`. Правила не дозволяють користувачам змінювати власну роль.
 
-## Running end-to-end tests
+## Як це працює
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice.
+| Роль | Що може |
+| --- | --- |
+| Гравець | Бачить найближче тренування, приєднується (з підтвердженням), скасовує участь, додає гостей без акаунта, дивиться рейтинг і графіки |
+| Адмін | Починає новий сезон (попередній закривається, його рейтинг лишається в історії), створює/редагує/видаляє події, ділить учасників на 2–4 команди, ставить очки командам, дає бонуси/штрафи окремим гравцям, завершує подію |
 
-## Further help
+- **Головна** показує найближчу незавершену подію (до ~3 годин після початку).
+- **Очки:** кожен гравець команди отримує очки команди + свій бонус/штраф. Після «Завершити подію» очки йдуть у рейтинг сезону; результати можна оновити й пізніше.
+- **Гості** беруть участь у командах і в явці, але не потрапляють у рейтинг.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Структура даних (Firestore)
+
+```
+users/{uid}                     name, email, photoURL, role
+seasons/{id}                    name, type (summer|winter), active, startedAt, endedAt
+events/{id}                     seasonId, startsAt, location, note, status (open|finished),
+                                teams[], adjustments{}, summary{attendees[], points{}}
+events/{id}/attendees/{id}      kind (user|guest), uid, name, addedBy, addedByName
+```
+
+## Код
+
+- `src/lib/backend.ts` — Firebase або демо-бекенд за спільним інтерфейсом
+- `src/lib/api.ts` — хуки підписок і дії (сезони, події, запис, результати)
+- `src/lib/stats.ts` — підрахунок рейтингу та явки
+- `src/pages/` — Вхід, Головна, Рейтинг, Профіль, Керування, Редагування події

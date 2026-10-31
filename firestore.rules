@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn();
+      // Everyone starts as a regular user; admins are promoted in the Firebase console.
+      allow create: if request.auth.uid == uid && request.resource.data.role == 'user';
+      allow update: if (request.auth.uid == uid && request.resource.data.role == resource.data.role) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /seasons/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /events/{eventId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+
+      match /attendees/{attendeeId} {
+        allow read: if signedIn();
+        // A user can sign themself up (doc id = uid) or add guests on their own behalf.
+        allow create: if isAdmin() || (
+          request.resource.data.addedBy == request.auth.uid &&
+          (
+            (request.resource.data.kind == 'user' && attendeeId == request.auth.uid && request.resource.data.uid == request.auth.uid) ||
+            (request.resource.data.kind == 'guest' && request.resource.data.uid == null)
+          ) &&
+          get(/databases/$(database)/documents/events/$(eventId)).data.status == 'open'
+        );
+        allow delete: if isAdmin() || (resource.data.addedBy == request.auth.uid &&
+          get(/databases/$(database)/documents/events/$(eventId)).data.status == 'open');
+        allow update: if isAdmin();
+      }
+    }
+  }
+}
