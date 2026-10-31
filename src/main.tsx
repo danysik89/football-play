@@ -13,6 +13,7 @@ import './index.css';
 // Charts and admin tools are heavy and not needed on first paint.
 const RatingPage = lazy(() => import('./pages/RatingPage').then((m) => ({ default: m.RatingPage })));
 const AdminPage = lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })));
+const AdminUsersPage = lazy(() => import('./pages/AdminUsersPage').then((m) => ({ default: m.AdminUsersPage })));
 const AdminEventPage = lazy(() => import('./pages/AdminEventPage').then((m) => ({ default: m.AdminEventPage })));
 
 function AdminOnly({ children }: { children: ReactNode }) {
@@ -32,6 +33,7 @@ function App() {
         <Route path="rating" element={<RatingPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="admin" element={<AdminOnly><AdminPage /></AdminOnly>} />
+        <Route path="admin/users" element={<AdminOnly><AdminUsersPage /></AdminOnly>} />
         <Route path="admin/event/:id" element={<AdminOnly><AdminEventPage /></AdminOnly>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

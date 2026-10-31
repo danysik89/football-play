@@ -1,4 +1,4 @@
-import { CalendarPlus, ChevronRight, Flag, Snowflake, Sun } from 'lucide-react';
+import { CalendarPlus, ChevronRight, Flag, Snowflake, Sun, UsersRound } from 'lucide-react';
 import { useMemo, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Button, Card, Field, Modal, PageTitle } from '../components/ui';
@@ -29,6 +29,16 @@ export function AdminPage() {
       <PageTitle sub="Сезони, тренування та результати">Керування</PageTitle>
       <div className="space-y-4">
         <SeasonCard active={activeSeason} hasSeasons={seasons.length > 0} />
+        <Link to="/admin/users" className="flex items-center gap-4 rounded-3xl border border-line bg-surface p-5 transition hover:border-accent/40">
+          <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent">
+            <UsersRound size={24} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-base font-bold">Гравці та ролі</p>
+            <p className="text-sm text-muted">Призначити інших адмінів</p>
+          </div>
+          <ChevronRight size={20} className="shrink-0 text-muted" />
+        </Link>
         {activeSeason && <CreateEventCard seasonId={activeSeason.id} lastLocation={events.at(-1)?.location ?? ''} />}
 
         {open.length > 0 && (
