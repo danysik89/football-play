@@ -4,6 +4,8 @@ import { EventView } from '../components/EventView';
 import { Button, EmptyState, Spinner } from '../components/ui';
 import { pickCurrentEvent, useEvent, useEvents } from '../lib/api';
 import { shortDate, time } from '../lib/format';
+import { isDemo } from '../lib/backend';
+import { loadDemoData } from '../lib/demoSeed';
 import { useSession } from '../lib/session';
 import type { FootballEvent } from '../lib/types';
 
@@ -30,11 +32,18 @@ export function HomePage() {
           title="Найближчих тренувань немає"
           text={isAdmin ? 'Створи нову подію, щоб гравці могли записатися.' : 'Адміністратор ще не створив наступне тренування. Зазирни пізніше.'}
           action={
-            isAdmin && (
-              <Button onClick={() => navigate('/admin')}>
-                <CalendarPlus size={20} /> Створити тренування
-              </Button>
-            )
+            <div className="flex flex-col gap-2">
+              {isAdmin && (
+                <Button onClick={() => navigate('/admin')}>
+                  <CalendarPlus size={20} /> Створити тренування
+                </Button>
+              )}
+              {isDemo && user && (
+                <Button variant="secondary" onClick={() => loadDemoData(user)}>
+                  Показати з прикладовими даними
+                </Button>
+              )}
+            </div>
           }
         />
       )}

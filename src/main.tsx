@@ -2,7 +2,9 @@ import { lazy, StrictMode, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { SessionProvider, useSession } from './lib/session';
+import { applyTheme, savedThemeId } from './lib/themes';
 import { EventPage, HomePage, PageSpinner } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { ProfilePage } from './pages/ProfilePage';
@@ -37,11 +39,14 @@ function App() {
   );
 }
 
+applyTheme(savedThemeId());
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <SessionProvider>
         <App />
+        <ThemeSwitcher />
       </SessionProvider>
     </BrowserRouter>
   </StrictMode>,

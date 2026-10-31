@@ -5,7 +5,7 @@ import { initials } from '../lib/format';
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-accent text-on-accent hover:brightness-110 active:brightness-95 shadow-[0_8px_30px_-8px_rgb(198_244_50/0.5)]',
+  primary: 'bg-accent text-on-accent hover:brightness-110 active:brightness-95 shadow-[0_8px_30px_-8px_color-mix(in_srgb,var(--color-accent)_50%,transparent)]',
   secondary: 'bg-surface-2 text-fg hover:bg-line border border-line',
   ghost: 'text-fg hover:bg-surface-2',
   danger: 'bg-danger/10 text-danger hover:bg-danger/20 border border-danger/30',
@@ -85,7 +85,7 @@ export function Field({ label, hint, error, className = '', ...rest }: InputHTML
         id={id}
         {...rest}
         aria-invalid={!!error}
-        className="h-12 w-full rounded-2xl border border-line bg-bg px-4 text-base text-fg placeholder:text-muted/60 transition outline-none focus:border-accent aria-invalid:border-danger [color-scheme:dark]"
+        className="h-12 w-full rounded-2xl border border-line bg-bg px-4 text-base text-fg placeholder:text-muted/60 transition outline-none focus:border-accent aria-invalid:border-danger"
       />
       {error ? <p className="mt-1.5 text-sm text-danger">{error}</p> : hint && <p className="mt-1.5 text-sm text-muted">{hint}</p>}
     </div>

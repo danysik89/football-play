@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { Avatar, Badge, Button, Card, Field, PageTitle } from '../components/ui';
 import { updateUser, useEvents, useSeasons } from '../lib/api';
 import { auth, isDemo } from '../lib/backend';
+import { loadDemoData } from '../lib/demoSeed';
 import { plural } from '../lib/format';
 import { useSession } from '../lib/session';
 import { seasonStats } from '../lib/stats';
@@ -78,6 +79,10 @@ export function ProfilePage() {
             <Button variant="secondary" className="w-full" onClick={() => updateUser(user.uid, { role: isAdmin ? 'user' : 'admin' })}>
               Зробити мене {isAdmin ? 'гравцем' : 'адміном'}
             </Button>
+            <Button variant="secondary" className="mt-2 w-full" onClick={() => loadDemoData(user)}>
+              Заповнити прикладовими даними
+            </Button>
+            <p className="mt-2 text-xs text-muted">Замінить усі поточні демо-дані: 2 сезони, 18 тренувань, 16 гравців.</p>
           </Card>
         )}
 

@@ -11,7 +11,7 @@ import { PageSpinner } from './HomePage';
 const tooltipStyle = {
   contentStyle: { background: 'var(--color-surface-2)', border: '1px solid var(--color-line)', borderRadius: 12, color: 'var(--color-fg)' },
   labelStyle: { color: 'var(--color-muted)', fontWeight: 600 },
-  cursor: { fill: 'rgb(255 255 255 / 0.04)' },
+  cursor: { fill: 'color-mix(in srgb, var(--color-fg) 4%, transparent)' },
 };
 const axis = { stroke: 'var(--color-muted)', fontSize: 12, tickLine: false, axisLine: false } as const;
 
@@ -80,7 +80,7 @@ export function RatingPage() {
                   <li key={r.uid} className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 ${me ? 'bg-accent/10' : ''}`}>
                     <span
                       className="flex size-7 shrink-0 items-center justify-center rounded-full font-display text-sm font-extrabold tabular-nums"
-                      style={medal ? { background: medal, color: '#0b1410' } : { color: 'var(--color-muted)' }}
+                      style={medal ? { background: medal, color: '#1a1a1a' } : { color: 'var(--color-muted)' }}
                     >
                       {i + 1}
                     </span>

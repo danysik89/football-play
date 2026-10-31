@@ -19,6 +19,10 @@
   --color-team-d: #ff7ac3;
 }
 
+html {
+  color-scheme: dark;
+}
+
 html,
 body {
   background: var(--color-bg);
@@ -34,8 +38,8 @@ body {
 /* Subtle pitch lines in the background */
 .pitch-bg {
   background-image:
-    radial-gradient(circle at 50% -10%, rgb(198 244 50 / 0.12), transparent 55%),
-    repeating-linear-gradient(90deg, transparent 0 56px, rgb(255 255 255 / 0.015) 56px 112px);
+    radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 55%),
+    repeating-linear-gradient(90deg, transparent 0 56px, color-mix(in srgb, var(--color-fg) 1.5%, transparent) 56px 112px);
 }
 
 :focus-visible {
