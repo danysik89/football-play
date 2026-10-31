@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { auth, isDemo, store, type AuthUser } from './backend';
+import { seedOnFirstVisit } from './demoSeed';
 import type { AppUser } from './types';
 
 interface Session {
@@ -28,6 +29,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     let creating = false;
     return store.watchDoc<Omit<AppUser, 'uid'>>(`users/${authUser.uid}`, (doc) => {
       if (doc) {
+        if (isDemo) seedOnFirstVisit({ uid: authUser.uid, name: doc.name, email: doc.email });
         setUser({ ...doc, uid: authUser.uid });
         setProfileReady(true);
         return;

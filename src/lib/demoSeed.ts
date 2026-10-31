@@ -135,5 +135,23 @@ function guestAttendee(id: string, name: string, host: Attendee, ts: number): At
 
 export function loadDemoData(me: { uid: string; name: string; email: string }) {
   localStorage.setItem('fc-demo-db', JSON.stringify(buildDemoData(me)));
+  localStorage.setItem(SEEDED_KEY, '1');
   location.assign(import.meta.env.BASE_URL);
+}
+
+const SEEDED_KEY = 'fc-demo-seeded';
+
+/** First visit in demo mode: fill the app so it doesn't look empty. Runs once per browser. */
+export function seedOnFirstVisit(me: { uid: string; name: string; email: string }) {
+  try {
+    if (localStorage.getItem(SEEDED_KEY)) return;
+    const db = JSON.parse(localStorage.getItem('fc-demo-db') || '{}') as Record<string, unknown>;
+    if (Object.keys(db).some((p) => p.startsWith('events/'))) {
+      localStorage.setItem(SEEDED_KEY, '1');
+      return;
+    }
+    loadDemoData(me);
+  } catch {
+    /* storage unavailable — leave the app empty */
+  }
 }
