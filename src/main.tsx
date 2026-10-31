@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { SessionProvider, useSession } from './lib/session';
-import { applyTheme, savedThemeId } from './lib/themes';
+import { initTheme } from './lib/themes';
 import { EventPage, HomePage, PageSpinner } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { ProfilePage } from './pages/ProfilePage';
@@ -41,7 +41,7 @@ function App() {
   );
 }
 
-applyTheme(savedThemeId());
+initTheme();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

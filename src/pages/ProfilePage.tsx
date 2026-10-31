@@ -1,5 +1,6 @@
 import { LogOut, Shield } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { ModeToggle } from '../components/ThemeSwitcher';
 import { Avatar, Badge, Button, Card, Field, PageTitle } from '../components/ui';
 import { updateUser, useEvents, useSeasons } from '../lib/api';
 import { auth, isDemo } from '../lib/backend';
@@ -73,6 +74,11 @@ export function ProfilePage() {
           </Button>
         </Card>
 
+        <Card>
+          <p className="mb-3 text-sm font-semibold text-muted">Оформлення</p>
+          <ModeToggle />
+        </Card>
+
         {isDemo && (
           <Card>
             <p className="mb-3 text-sm text-muted">Демо: перемкни роль, щоб побачити застосунок очима звичайного гравця чи адміна.</p>
@@ -80,7 +86,7 @@ export function ProfilePage() {
               Зробити мене {isAdmin ? 'гравцем' : 'адміном'}
             </Button>
             <Button variant="secondary" className="mt-2 w-full" onClick={() => loadDemoData(user)}>
-              Заповнити прикладовими даними
+              Скинути до прикладових даних
             </Button>
             <p className="mt-2 text-xs text-muted">Замінить усі поточні демо-дані: 2 сезони, 18 тренувань, 16 гравців.</p>
           </Card>
