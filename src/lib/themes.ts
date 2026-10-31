@@ -32,6 +32,26 @@ export const THEMES: Theme[] = [
     },
   },
   {
+    id: 'ocean',
+    name: 'Глибокий океан',
+    scheme: 'dark',
+    colors: {
+      bg: '#06101f', surface: '#0c1a30', 'surface-2': '#132540', line: '#1d3354', fg: '#e8f1ff', muted: '#93a9c9',
+      accent: '#38bdf8', 'on-accent': '#06101f', danger: '#ff6b7a',
+      'team-a': '#38bdf8', 'team-b': '#a3e635', 'team-c': '#fbbf24', 'team-d': '#f472b6',
+    },
+  },
+  {
+    id: 'midnight',
+    name: 'Північ',
+    scheme: 'dark',
+    colors: {
+      bg: '#0b1020', surface: '#121a33', 'surface-2': '#1a2445', line: '#26325a', fg: '#eef1fb', muted: '#9aa6c8',
+      accent: '#6e9bff', 'on-accent': '#0b1020', danger: '#ff7a85',
+      'team-a': '#6e9bff', 'team-b': '#5eead4', 'team-c': '#fcd34d', 'team-d': '#f9a8d4',
+    },
+  },
+  {
     id: 'ukraine',
     name: 'Синьо-жовта',
     scheme: 'dark',

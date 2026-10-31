@@ -114,14 +114,15 @@ export const deleteEvent = (id: string) => store.remove(`events/${id}`);
 
 // ---------------------------------------------------------------- attendance
 
-export function joinEvent(eventId: string, user: AppUser) {
+/** Sign `user` up for the event; `by` is who did it (themself, or a friend bringing them). */
+export function joinEvent(eventId: string, user: AppUser, by: AppUser = user) {
   return store.set(`events/${eventId}/attendees/${user.uid}`, {
     kind: 'user',
     uid: user.uid,
     name: user.name,
     photoURL: user.photoURL ?? null,
-    addedBy: user.uid,
-    addedByName: user.name,
+    addedBy: by.uid,
+    addedByName: by.name,
     createdAt: Date.now(),
   });
 }

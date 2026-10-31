@@ -1,9 +1,9 @@
-import { Check, Clock, MapPin, Trash2, UserPlus, Users } from 'lucide-react';
-import { useState, type FormEvent } from 'react';
-import { addGuest, joinEvent, removeAttendee, useAttendees } from '../lib/api';
+import { Check, Clock, MapPin, Search, Trash2, UserPlus, Users } from 'lucide-react';
+import { useRef, useState, type FormEvent } from 'react';
+import { addGuest, joinEvent, removeAttendee, useAttendees, useUsers } from '../lib/api';
 import { dayMonth, plural, relativeDay, time, weekday } from '../lib/format';
 import { useSession } from '../lib/session';
-import type { Attendee, FootballEvent } from '../lib/types';
+import type { AppUser, Attendee, FootballEvent } from '../lib/types';
 import { Avatar, Badge, Button, Card, Field, IconButton, Modal, Spinner } from './ui';
 
 export function EventView({ event }: { event: FootballEvent }) {
@@ -15,7 +15,8 @@ export function EventView({ event }: { event: FootballEvent }) {
 
   if (!user) return null;
   const me = attendees.find((a) => a.id === user.uid);
-  const myGuests = attendees.filter((a) => a.kind === 'guest' && a.addedBy === user.uid);
+  // People I brought: guests without an account and registered players I signed up.
+  const myGuests = attendees.filter((a) => a.addedBy === user.uid && a.id !== user.uid);
   const isOpen = event.status === 'open';
   const rel = relativeDay(event.startsAt);
 
@@ -80,7 +81,7 @@ export function EventView({ event }: { event: FootballEvent }) {
                 </Button>
               )}
               <Button variant="ghost" className="mt-2 w-full text-muted" onClick={() => setGuestOpen(true)}>
-                <UserPlus size={18} /> Додати гостей{myGuests.length > 0 && ` (${myGuests.length})`}
+                <UserPlus size={18} /> Додати друзів{myGuests.length > 0 && ` (${myGuests.length})`}
               </Button>
             </div>
           )}
@@ -142,7 +143,7 @@ export function EventView({ event }: { event: FootballEvent }) {
         </Button>
       </Modal>
 
-      <GuestsModal open={guestOpen} onClose={() => setGuestOpen(false)} event={event} guests={myGuests} />
+      <GuestsModal open={guestOpen} onClose={() => setGuestOpen(false)} event={event} guests={myGuests} attendees={attendees} />
     </div>
   );
 }
@@ -157,7 +158,11 @@ function AttendeeRow({ attendee: a, index, isMe, canRemove, onRemove }: { attend
           {a.name}
           {isMe && <span className="font-semibold text-accent"> · ти</span>}
         </p>
-        {a.kind === 'guest' && <p className="truncate text-sm text-muted">Гість від {a.addedByName}</p>}
+        {a.kind === 'guest' ? (
+          <p className="truncate text-sm text-muted">Гість від {a.addedByName}</p>
+        ) : (
+          a.addedBy !== a.uid && <p className="truncate text-sm text-muted">Записав(-ла) {a.addedByName}</p>
+        )}
       </div>
       {a.kind === 'guest' && <Badge className="bg-team-c/15 text-team-c">Гість</Badge>}
       {canRemove && !isMe && (
@@ -169,48 +174,118 @@ function AttendeeRow({ attendee: a, index, isMe, canRemove, onRemove }: { attend
   );
 }
 
-function GuestsModal({ open, onClose, event, guests }: { open: boolean; onClose: () => void; event: FootballEvent; guests: Attendee[] }) {
+function GuestsModal({ open, onClose, event, guests, attendees }: { open: boolean; onClose: () => void; event: FootballEvent; guests: Attendee[]; attendees: Attendee[] }) {
   const { user } = useSession();
-  const [name, setName] = useState('');
+  const users = useUsers();
+  const [query, setQuery] = useState('');
   const [busy, setBusy] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !user) return;
+  const q = query.trim().toLowerCase();
+  const present = new Set(attendees.map((a) => a.id));
+  const matches = q
+    ? users
+        .filter((u) => u.name.toLowerCase().includes(q))
+        .sort((a, b) => Number(present.has(a.uid)) - Number(present.has(b.uid)) || a.name.localeCompare(b.name))
+        .slice(0, 6)
+    : [];
+  const available = matches.filter((u) => !present.has(u.uid));
+
+  const run = async (fn: () => Promise<unknown>) => {
     setBusy(true);
     try {
-      await addGuest(event.id, name, user);
-      setName('');
+      await fn();
+      setQuery('');
+      // Keep the keyboard open for adding the next friend.
+      searchRef.current?.querySelector('input')?.focus();
     } finally {
       setBusy(false);
     }
   };
+  const addUser = (u: AppUser) => user && run(() => joinEvent(event.id, u, user));
+  const addAsGuest = () => user && q && run(() => addGuest(event.id, query, user));
+
+  // Enter picks the first available player, or adds a guest when nobody matches.
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    if (available[0]) addUser(available[0]);
+    else if (!matches.length) addAsGuest();
+  };
 
   return (
-    <Modal open={open} onClose={onClose} title="Твої гості">
-      <p className="mb-4 text-muted">Друзі без акаунта. Вони з’являться у списку з позначкою «Гість».</p>
-      <form onSubmit={submit} className="flex items-end gap-2">
-        <Field label="Ім’я гостя" className="flex-1" value={name} onChange={(e) => setName(e.target.value)} placeholder="Напр. Олег" maxLength={40} />
-        <Button type="submit" loading={busy} disabled={!name.trim()} aria-label="Додати гостя">
-          <UserPlus size={20} />
-        </Button>
+    <Modal open={open} onClose={onClose} title="Додати друзів">
+      <p className="mb-4 text-muted">Знайди гравця із застосунку або впиши ім’я гостя без акаунта.</p>
+      <form onSubmit={submit}>
+        <div className="relative" ref={searchRef}>
+          <Search size={18} className="pointer-events-none absolute top-[2.85rem] left-4 text-muted" aria-hidden />
+          <Field
+            label="Ім’я друга"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Почни вводити ім’я…"
+            maxLength={40}
+            autoComplete="off"
+            className="[&_input]:pl-11"
+          />
+        </div>
       </form>
-      {guests.length > 0 && (
-        <ul className="mt-4 space-y-1">
-          {guests.map((g) => (
-            <li key={g.id} className="flex items-center gap-3 rounded-2xl bg-bg/50 py-1 pr-1 pl-3">
-              <Avatar name={g.name} size={32} />
-              <span className="flex-1 truncate font-semibold">{g.name}</span>
-              <IconButton label={`Прибрати ${g.name}`} onClick={() => removeAttendee(event.id, g.id)}>
-                <Trash2 size={18} />
-              </IconButton>
-            </li>
-          ))}
+
+      {q && (
+        <ul className="mt-2 space-y-1" aria-label="Результати пошуку">
+          {matches.map((u) => {
+            const inList = present.has(u.uid);
+            return (
+              <li key={u.uid}>
+                <button
+                  disabled={inList || busy}
+                  onClick={() => addUser(u)}
+                  className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-2 py-2 text-left transition hover:bg-surface-2 disabled:cursor-default disabled:hover:bg-transparent"
+                >
+                  <Avatar name={u.name} photoURL={u.photoURL} size={36} />
+                  <span className={`flex-1 truncate font-semibold ${inList ? 'text-muted' : ''}`}>{u.name}</span>
+                  {inList ? (
+                    <span className="text-xs font-semibold text-muted">вже в складі</span>
+                  ) : (
+                    <UserPlus size={18} className="text-accent" />
+                  )}
+                </button>
+              </li>
+            );
+          })}
+          <li>
+            <button
+              disabled={busy}
+              onClick={addAsGuest}
+              className={`flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-dashed px-3 py-3 text-left transition ${
+                matches.length ? 'border-line text-muted hover:text-fg' : 'border-accent/50 bg-accent/10 text-accent'
+              }`}
+            >
+              <UserPlus size={18} className="shrink-0" />
+              <span className="min-w-0 flex-1 font-semibold break-words">
+                {matches.length ? 'Інша людина? ' : 'Такого гравця немає. '}Додати «{query.trim()}» як гостя
+              </span>
+            </button>
+          </li>
         </ul>
       )}
-      <p className="mt-4 text-sm text-muted">
-        Ти привів: {guests.length} {plural(guests.length, 'гостя', 'гостей', 'гостей')}
-      </p>
+
+      {guests.length > 0 && (
+        <>
+          <p className="mt-5 mb-2 text-sm font-semibold text-muted">Ти привів</p>
+          <ul className="space-y-1">
+            {guests.map((g) => (
+              <li key={g.id} className="flex items-center gap-3 rounded-2xl bg-bg/50 py-1 pr-1 pl-3">
+                <Avatar name={g.name} photoURL={g.photoURL} size={32} />
+                <span className="flex-1 truncate font-semibold">{g.name}</span>
+                {g.kind === 'guest' && <Badge className="bg-team-c/15 text-team-c">Гість</Badge>}
+                <IconButton label={`Прибрати ${g.name}`} onClick={() => removeAttendee(event.id, g.id)}>
+                  <Trash2 size={18} />
+                </IconButton>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </Modal>
   );
 }

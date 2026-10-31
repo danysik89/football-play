@@ -25,16 +25,19 @@ service cloud.firestore {
 
       match /attendees/{attendeeId} {
         allow read: if signedIn();
-        // A user can sign themself up (doc id = uid) or add guests on their own behalf.
+        // A user can sign up themself or another registered player (doc id = their uid),
+        // or add guests without an account on their own behalf.
         allow create: if isAdmin() || (
           request.resource.data.addedBy == request.auth.uid &&
           (
-            (request.resource.data.kind == 'user' && attendeeId == request.auth.uid && request.resource.data.uid == request.auth.uid) ||
+            (request.resource.data.kind == 'user' && request.resource.data.uid == attendeeId &&
+              exists(/databases/$(database)/documents/users/$(attendeeId))) ||
             (request.resource.data.kind == 'guest' && request.resource.data.uid == null)
           ) &&
           get(/databases/$(database)/documents/events/$(eventId)).data.status == 'open'
         );
-        allow delete: if isAdmin() || (resource.data.addedBy == request.auth.uid &&
+        // The person who added the entry, or the player themself, can remove it.
+        allow delete: if isAdmin() || ((resource.data.addedBy == request.auth.uid || attendeeId == request.auth.uid) &&
           get(/databases/$(database)/documents/events/$(eventId)).data.status == 'open');
         allow update: if isAdmin();
       }
