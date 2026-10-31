@@ -135,5 +135,5 @@ function guestAttendee(id: string, name: string, host: Attendee, ts: number): At
 
 export function loadDemoData(me: { uid: string; name: string; email: string }) {
   localStorage.setItem('fc-demo-db', JSON.stringify(buildDemoData(me)));
-  location.assign('/');
+  location.assign(import.meta.env.BASE_URL);
 }
